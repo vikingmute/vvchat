@@ -23,8 +23,10 @@
         </button>
       </div>
     </div>
-    <div class="h-full flex-1">
-      <ProviderSelect :items="providers"/>
+    <div class="h-full flex-1 flex items-center">
+      <div class="w-[80%] mx-auto">
+        <ProviderSelect :items="providers"/>
+      </div>
     </div>
   </div>
 </template>
