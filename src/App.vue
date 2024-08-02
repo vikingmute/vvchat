@@ -24,18 +24,26 @@
       </div>
     </div>
     <div class="h-full flex-1 flex items-center">
-      <div class="w-[80%] mx-auto">
-        <ProviderSelect :items="providers"/>
+      <div class="w-[80%] mx-auto h-full">
+        <div class="flex items-center h-[85%]">
+          <ProviderSelect :items="providers" v-model="selectedModel"/>
+        </div>
+        <div class="flex items-center h-[15%]">
+          <MessageInput />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { ConversationProps, ProviderProps } from './types'
 import ConversationList from './components/ConversationList.vue'
-import ProviderSelect from './components/ProviderSelect.vue';
+import ProviderSelect from './components/ProviderSelect.vue'
+import MessageInput from './components/MessageInput.vue'
+const selectedModel = ref('')
 const items: ConversationProps[] = [
   { id: 1, selectedModel: 'GPT-3.5-Turbo', title: '什么是光合作用1', createdAt: '2024-07-03', updatedAt: '2024-07-03', providerId: 1},
   { id: 2, selectedModel: 'GPT-3.5-Turbo', title: '什么是光合作用', createdAt: '2024-07-03', updatedAt: '2024-07-03', providerId: 1},
