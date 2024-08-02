@@ -26,9 +26,22 @@
  * ```
  */
 import { createApp } from 'vue'
+import { createRouter, createMemoryHistory } from 'vue-router'
 import App from './App.vue'
+import Home from './views/Home.vue'
+import Conversation from './views/Conversation.vue'
+import Settings from './views/Settings.vue'
 import './index.css';
 
+const routes = [
+  { path: '/', component: Home },
+  { path: '/conversation', component: Conversation },
+  { path: '/settings', component: Settings }
+]
+const router = createRouter({
+  history: createMemoryHistory(),
+  routes
+})
 console.log('👋 This message is being logged by "renderer.ts", included via Vite');
 
-createApp(App).mount('#app')
+createApp(App).use(router).mount('#app')
