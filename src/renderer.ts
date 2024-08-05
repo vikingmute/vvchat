@@ -35,7 +35,7 @@ import './index.css';
 
 const routes = [
   { path: '/', component: Home },
-  { path: '/conversation', component: Conversation },
+  { path: '/conversation/:id', component: Conversation },
   { path: '/settings', component: Settings }
 ]
 const router = createRouter({
