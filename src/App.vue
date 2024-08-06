@@ -28,6 +28,7 @@
       </div>
     </div>
     <div class="h-full flex-1">
+      <Button color="purple" plain> Hello there</Button>
       <RouterView/>
     </div>
   </div>
@@ -37,6 +38,7 @@
 import { Icon } from '@iconify/vue'
 import { conversations } from './testData'
 import ConversationList from './components/ConversationList.vue'
+import Button from './components/Button.vue';
 
 console.log('👋 This message is being logged by "App.vue", included via Vite');
 </script>
