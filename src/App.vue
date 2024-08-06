@@ -6,39 +6,26 @@
       </div>
       <div class="h-[10%] grid grid-cols-2 gap-2 p-2">
         <RouterLink to="/">
-        <button
-          class="shadow-sm inline-flex items-center justify-center
-            bg-green-700 text-white hover:bg-green-700/90 border border-green-700
-            h-[32px] py-[8px] px-[15px] text-sm rounded-[4px]"
-        >
-          <Icon icon="radix-icons:chat-bubble" class="mr-2"></Icon>
-          新建聊天
-        </button>
+          <Button icon-name="radix-icons:chat-bubble" class="w-full">
+            新建聊天
+          </Button>
         </RouterLink>
         <RouterLink to="/settings">
-        <button
-          class="shadow-sm inline-flex items-center justify-center
-            bg-green-50 text-green-700 hover:bg-green-700 border border-green-700 hover:text-white
-            h-[32px] py-[8px] px-[15px] text-sm rounded-[4px]"
-        >
-          <Icon icon="radix-icons:gear" class="mr-2"></Icon>
-          应用设置
-        </button>
+          <Button icon-name="radix-icons:gear" plain class="w-full">
+            应用设置
+          </Button>
         </RouterLink>
       </div>
     </div>
     <div class="h-full flex-1">
-      <Button color="purple" plain> Hello there</Button>
       <RouterView/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
 import { conversations } from './testData'
 import ConversationList from './components/ConversationList.vue'
 import Button from './components/Button.vue';
-
 console.log('👋 This message is being logged by "App.vue", included via Vite');
 </script>
