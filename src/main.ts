@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from 'electron';
 import { ChatCompletion } from '@baiducloud/qianfan'
-import path from 'path';
+import path from 'path'
+import 'dotenv/config'
+import OpenAI from 'openai'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -26,21 +28,35 @@ const createWindow = async () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
-
-  const client = new ChatCompletion()
-  const stream = await client.chat({
+  const client = new OpenAI({
+    apiKey: process.env['ALI_API_KEY'],
+    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+  })
+  const resp = await client.chat.completions.create({
     messages: [
-      {"role":"user","content":"你好"},
-      {"role":"assistant","content":"如果您有任何问题，请随时向我提问。"},
-      {"role":"user","content": "我在上海，周末可以去哪里玩？"},
-      {"role":"assistant","content": "上海是一个充满活力和文化氛围的城市，有很多适合周末游玩的地方。"},
-      {"role":"user","content": "周末这里的天气怎么样？"}
+      { role: 'system', content: '你现在是一只卡通片里面的可爱小狗，请模仿汪汪队长的口吻进行回答' },
+      { role: 'user', content: '请问队长，老鼠为什么有害呢？' }
     ],
-    stream: true
-  }, 'ERNIE-Speed-128K')
-  for await (const chunk of stream) {
-    console.log(chunk)
-  }
+    model: 'qwen-turbo',
+  })
+  // for await (const chunk of stream) {
+  //   console.log(chunk.choices[0].delta)
+  // }
+  console.log('resp', resp.choices[0].message)
+  // const client = new ChatCompletion()
+  // const stream = await client.chat({
+  //   messages: [
+  //     {"role":"user","content":"你好"},
+  //     {"role":"assistant","content":"如果您有任何问题，请随时向我提问。"},
+  //     {"role":"user","content": "我在上海，周末可以去哪里玩？"},
+  //     {"role":"assistant","content": "上海是一个充满活力和文化氛围的城市，有很多适合周末游玩的地方。"},
+  //     {"role":"user","content": "周末这里的天气怎么样？"}
+  //   ],
+  //   stream: true
+  // }, 'ERNIE-Speed-128K')
+  // for await (const chunk of stream) {
+  //   console.log(chunk)
+  // }
 };
 
 // This method will be called when Electron has finished
