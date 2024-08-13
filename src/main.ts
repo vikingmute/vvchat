@@ -3,7 +3,8 @@ import { ChatCompletion } from '@baiducloud/qianfan'
 import path from 'path'
 import 'dotenv/config'
 import OpenAI from 'openai'
-import fs from 'fs/promises'
+// import fs from 'fs/promises'
+import fs from 'fs'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -33,19 +34,29 @@ const createWindow = async () => {
     apiKey: process.env['ALI_API_KEY'],
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
   })
-  const imageBuffer = await fs.readFile('/Users/viking/Desktop/dog.jpeg')
-  const base64Image = imageBuffer.toString('base64')
-  console.log('base64', base64Image)
+  const fileObj = await client.files.create({ file: fs.createReadStream('/Users/viking/Desktop/1.pdf'), purpose: 'file-extract' as any })
+  console.log('resp', fileObj)
   const resp = await client.chat.completions.create({
-    messages: [ {
-      role: 'user',
-      content: [
-        { type: 'text', text: '图中是什么动物？'},
-        { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${base64Image}`}}
-      ]
-    }],
-    model: 'qwen-vl-plus'
+    messages: [
+      {"role": "system", "content": "You are a helpful assistant."},
+      { role: 'system', content: `fileid://${fileObj.id}`},
+      {"role": "user", "content": "请帮忙概括文件讲述了什么"},
+    ],
+    model: 'qwen-long'
   })
+  // const imageBuffer = await fs.readFile('/Users/viking/Desktop/dog.jpeg')
+  // const base64Image = imageBuffer.toString('base64')
+  // console.log('base64', base64Image)
+  // const resp = await client.chat.completions.create({
+  //   messages: [ {
+  //     role: 'user',
+  //     content: [
+  //       { type: 'text', text: '图中是什么动物？'},
+  //       { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${base64Image}`}}
+  //     ]
+  //   }],
+  //   model: 'qwen-vl-plus'
+  // })
   // const resp = await client.chat.completions.create({
   //   messages: [
   //     { role: 'system', content: '你现在是一只卡通片里面的可爱小狗，请模仿汪汪队长的口吻进行回答' },
