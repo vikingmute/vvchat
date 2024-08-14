@@ -24,8 +24,20 @@
 </template>
 
 <script setup lang="ts">
-import { conversations } from './testData'
+import { onMounted } from 'vue'
+import { conversations, providers } from './testData'
+import { db } from './db'
 import ConversationList from './components/ConversationList.vue'
-import Button from './components/Button.vue';
+import Button from './components/Button.vue'
 console.log('👋 This message is being logged by "App.vue", included via Vite');
+onMounted(async () => {
+  // const insertedId = await db.providers.add(providers[0])
+  // console.log('insertedId', insertedId)
+  const items = await db.providers.where({ id: 2}).toArray()
+  console.log('items', items)
+  const updatedItem = await db.providers.update(1, { desc: 'updated desc'})
+  console.log('updatedItem', updatedItem)
+  const deletedItem = await db.providers.delete(1)
+  console.log('deletedItem', deletedItem)
+})
 </script>
