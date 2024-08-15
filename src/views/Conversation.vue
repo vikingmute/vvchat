@@ -11,22 +11,39 @@
 </div>
 </template>
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import MessageInput from '../components/MessageInput.vue'
 import MessageList from '../components/MessageList.vue'
 import { MessageProps, ConversationProps } from '../types'
-import { messages, conversations } from '../testData'
+import { db } from '../db'
 const route = useRoute()
 const filteredMessages = ref<MessageProps[]>([])
 const convsersation = ref<ConversationProps>()
 let conversationId = parseInt(route.params.id as string)
-filteredMessages.value = messages.filter(message => message.conversationId === conversationId)
-convsersation.value = conversations.find(item => item.id === conversationId)
-
-watch(() => route.params.id, (newId: string) => {
+const initMessageId = parseInt(route.query.init as string)
+const creatingInitialMessage = async () => {
+  const createdData: Omit<MessageProps, 'id'> = {
+    content: '',
+    conversationId,
+    type: 'answer',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    status: 'loading'
+  }
+  const newMessageId = await db.messages.add(createdData)
+  filteredMessages.value.push( { id: newMessageId, ...createdData })
+}
+watch(() => route.params.id, async (newId: string) => {
   conversationId = parseInt(newId)
-  filteredMessages.value = messages.filter(message => message.conversationId === conversationId)
-  convsersation.value = conversations.find(item => item.id === conversationId)
+  convsersation.value = await db.conversations.where({ id: conversationId }).first()
+  filteredMessages.value = await db.messages.where({ conversationId }).toArray()
+})
+onMounted(async () => {
+  convsersation.value = await db.conversations.where({ id: conversationId }).first()
+  filteredMessages.value = await db.messages.where({ conversationId }).toArray()
+  if (initMessageId) {
+    await creatingInitialMessage()
+  }
 })
 </script>
