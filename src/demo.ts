@@ -38,6 +38,20 @@ export async function run2() {
   for await (const chunk of stream) {
     console.log(chunk.choices[0].delta)
   }
+  //   choices: [
+  //     {
+  //       delta: [Object],
+  //       finish_reason: 'stop',
+  //       index: 0,
+  //       logprobs: null
+  //     }
+  //   ],
+  //   object: 'chat.completion.chunk',
+  //   usage: null,
+  //   created: 1723796437,
+  //   system_fingerprint: null,
+  //   model: 'qwen-turbo',
+  //   id: 'chatcmpl-5dc2a2c4-1dff-9d2c-97ec-feae95171490'
 }
 // 使用阿里通义千问 qwen-vl 识别图片
 export async function run3() {
