@@ -27,16 +27,18 @@ export const conversations: ConversationProps[] = [
 export const providers: ProviderProps[] = [
   {     
     id: 1,
-    name: '文心一言', 
+    name: 'qianfan',
+    title: '百度千帆',
     desc: '文心一言 百度出品的大模型',
-    models: ['ERNIE-4.0-8K', 'ERNIE-3.5-8K', 'ERNIE-Speed-8K'],
+    models: ['ERNIE-4.0-8K', 'ERNIE-3.5-8K', 'ERNIE-Speed-128K'],
     avatar: 'https://qph.cf2.poecdn.net/main-thumb-pb-3004-50-jougqzjtwfqfyqprxbdwofvnwattmtrg.jpeg',
     createdAt: '2024-07-03',
     updatedAt: '2024-07-03'
   },
   {     
     id: 2,
-    name: '通义千问', 
+    name: 'dashscope', 
+    title: '阿里灵积',
     desc: '通义千问',
     // https://help.aliyun.com/zh/dashscope/developer-reference/api-details?spm=a2c4g.11186623.0.0.5bf41507xgULX5#b148acc634pfc
     models: ['qwen-turbo', 'qwen-plus', 'qwen-max'],

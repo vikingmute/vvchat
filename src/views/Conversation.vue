@@ -15,7 +15,7 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import MessageInput from '../components/MessageInput.vue'
 import MessageList from '../components/MessageList.vue'
-import { MessageProps, ConversationProps } from '../types'
+import { MessageProps, ConversationProps, MessageStatus } from '../types'
 import { db } from '../db'
 const route = useRoute()
 const filteredMessages = ref<MessageProps[]>([])
@@ -60,5 +60,8 @@ onMounted(async () => {
     lastQuestion = lastMessage?.content || ''
     await creatingInitialMessage()
   }
+  window.electronAPI.onUpdateMessage(async (steamData) => {
+    console.log('stream', steamData)
+  })
 })
 </script>
