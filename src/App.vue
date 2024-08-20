@@ -3,6 +3,7 @@
     <div class=" w-[300px] bg-gray-200 h-full border-r border-gray-300">
       <div class="h-[90%] overflow-y-auto">
         <ConversationList :items="items"/>
+        <h3>{{conversationStore.totalNumber}}</h3>
       </div>
       <div class="h-[10%] grid grid-cols-2 gap-2 p-2">
         <RouterLink to="/">
@@ -15,12 +16,6 @@
             应用设置
           </Button>
         </RouterLink>
-        <Button icon-name="radix-icons:chat-bubble" class="w-full" @click="testAdd">
-            测试新增
-        </Button>
-        <Button icon-name="radix-icons:chat-bubble" class="w-full" @click="testReset">
-            测试Reset
-        </Button>
       </div>
     </div>
     <div class="h-full flex-1">
@@ -31,24 +26,15 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { db, initProviders } from './db'
-import { conversations } from './testData'
+import { initProviders } from './db'
 import { useConversationStore } from './stores/conversation'
 import ConversationList from './components/ConversationList.vue'
 import Button from './components/Button.vue'
 
-let index = 0
 const conversationStore = useConversationStore()
 const items = computed(() => conversationStore.items)
 onMounted(async () => {
   await initProviders()
-  conversationStore.items = await db.conversations.toArray()
+  conversationStore.fetchConversations()
 })
-const testAdd = () => {
-  index++
-  conversationStore.items.push(conversations[index])
-}
-const testReset = () => {
-  conversationStore.$reset()
-}
 </script>
