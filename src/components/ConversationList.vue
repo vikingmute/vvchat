@@ -1,7 +1,11 @@
 <template>
   <div class="conversation-list">
     <div 
-      class="item border-gray-300 border-t cursor-pointer bg-white hover:bg-gray-200 p-2"
+      class="item border-gray-300 border-t cursor-pointer  p-2"
+      :class="{
+        'bg-gray-100 hover:bg-gray-300': store.selectedId === item.id,
+        'bg-white hover:bg-gray-200': store.selectedId !== item.id
+      }"
       v-for="item in items"
       :key="item.id"
     >
@@ -20,10 +24,13 @@
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { ConversationProps } from '../types'
+import { useConversationStore } from '../stores/conversation'
 defineProps<{ items: ConversationProps[] }>()
 const router = useRouter()
+const store = useConversationStore()
 const goToConversation = (id: number) => {
-  router.push({ path: `/conversation/${id}`, query: { name: 'viking'}, hash: '#foo'})
+  router.push({ path: `/conversation/${id}`})
+  store.selectedId = id
 }
 </script>
   

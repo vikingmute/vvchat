@@ -32,6 +32,7 @@ import App from './App.vue'
 import Home from './views/Home.vue'
 import Conversation from './views/Conversation.vue'
 import Settings from './views/Settings.vue'
+import { useConversationStore } from './stores/conversation'
 import './index.css';
 
 const routes = [
@@ -42,6 +43,13 @@ const routes = [
 const router = createRouter({
   history: createMemoryHistory(),
   routes
+})
+router.beforeEach((to) => {
+  const store = useConversationStore()
+  console.log('path', to.path)
+  if (!to.path.startsWith('/conversation/')) {
+    store.selectedId = -1
+  }
 })
 const pinia = createPinia()
 console.log('👋 This message is being logged by "renderer.ts", included via Vite');
