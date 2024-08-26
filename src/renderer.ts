@@ -33,7 +33,8 @@ import Home from './views/Home.vue'
 import Conversation from './views/Conversation.vue'
 import Settings from './views/Settings.vue'
 import { useConversationStore } from './stores/conversation'
-import './index.css';
+import './index.css'
+import 'highlight.js/styles/github-dark.min.css'
 
 const routes = [
   { path: '/', component: Home },
