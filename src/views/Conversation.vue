@@ -70,6 +70,7 @@ const creatingInitialMessage = async () => {
     status: 'loading'
   }
   const newMessageId = await messageStore.createMessage(createdData)
+  await messageScrollToBottom()
   if (convsersation.value) {
     const provider = provdierStore.getProviderById(convsersation.value.providerId)
     if (provider) {
@@ -94,11 +95,26 @@ onMounted(async () => {
   if (initMessageId) {
     await creatingInitialMessage()
   }
+  let currentMessageListHeight = 0
+  const checkAndScrollToBottom = async () => {
+    if (messageListRef.value) {
+      const newHeight = messageListRef.value.ref.clientHeight
+      console.log('the newHeight', newHeight)
+			console.log('the currentMessageListHeight', currentMessageListHeight)
+      if (newHeight > currentMessageListHeight) {
+        console.log('scroll to bottom')
+        currentMessageListHeight = newHeight
+        await messageScrollToBottom()
+      }
+    }
+  }
   window.electronAPI.onUpdateMessage(async (streamData) => {
     console.log('stream', streamData)
     // update database
     // update filteredMessages
     messageStore.updateMessage(streamData)
+    await nextTick()
+    checkAndScrollToBottom()
   })
 })
 </script>
