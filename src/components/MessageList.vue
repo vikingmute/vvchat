@@ -1,5 +1,5 @@
 <template>
-  <div class="message-list" >
+  <div class="message-list" ref="_ref">
     <div class="message-item mb-3" v-for="message in messages" :key="message.id">
       <div class="flex" :class="{'justify-end': message.type === 'question'}">
         <div>
@@ -24,12 +24,16 @@
 </template>
   
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import VueMarkdown from 'vue-markdown-render'
 import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { MessageProps } from '../types'
 defineProps<{ messages: MessageProps[] }>()
 const plugins = [ markdownItHighlightjs ]
-
+const _ref = ref<HTMLDivElement>()
+defineExpose({
+  ref: _ref
+})
 </script>
   
