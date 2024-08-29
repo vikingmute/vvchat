@@ -30,7 +30,7 @@ export interface MessageProps {
 }
 
 export interface CreateChatProps {
-  messages: { role: string; content: string}[];
+  messages: { role: string; content: string, imagePath?: string}[];
   providerName: string;
   selectedModel: string;
   messageId: number;

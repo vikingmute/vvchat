@@ -5,6 +5,7 @@ import path from 'path'
 import fs from 'fs/promises'
 import 'dotenv/config'
 import { CreateChatProps } from './types'
+import { convertMessages } from './helper'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -32,10 +33,12 @@ const createWindow = async () => {
   ipcMain.on('start-chat', async (event, data: CreateChatProps ) => {
     console.log('hey', data)
     const { providerName, messages, messageId, selectedModel } = data
+    const convertedMessages = await convertMessages(messages)
+    console.log('convertedMessages', convertedMessages)
     if (providerName === 'qianfan') {
       const client = new ChatCompletion()
       const stream = await client.chat({
-        messages,
+        messages: convertedMessages,
         stream: true
       }, selectedModel)
       for await (const chunk of stream) {
@@ -55,7 +58,7 @@ const createWindow = async () => {
         baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
       })
       const stream = await client.chat.completions.create({
-        messages: messages as any,
+        messages: convertedMessages as any,
         model: selectedModel,
         stream: true
       })
