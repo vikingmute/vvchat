@@ -7,13 +7,10 @@ import url from 'url'
 import 'dotenv/config'
 import { CreateChatProps } from './types'
 import { convertMessages } from './helper'
-import { lookup } from 'mime-types'
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-
 const createWindow = async () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
