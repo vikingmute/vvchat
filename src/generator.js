@@ -7,6 +7,16 @@ let range = {
     }
   }
 }
+let asyncRange = {
+  from: 1,
+  to: 5,
+  async *[Symbol.asyncIterator]() {
+    for(let current = this.from; current <= this.to; current++) {
+      await new Promise(resolve => setTimeout(resolve, 500))
+      yield current;
+    }
+  }
+}
 const arr = 'abc'
 
 
@@ -18,8 +28,8 @@ function* generateSequence() {
 
 let generator = generateSequence()
 
-const run = () => {
-  for (const item of range) {
+const run = async () => {
+  for await (const item of asyncRange) {
     console.log('item', item)
   }
 }
