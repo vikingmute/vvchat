@@ -8,11 +8,15 @@ import 'dotenv/config'
 import { CreateChatProps } from './types'
 import { convertMessages } from './helper'
 import { createProvider } from './providers/createProvider'
+import { configManager } from './config'
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 const createWindow = async () => {
+  // 初始化配置
+  await configManager.load()
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1024,
@@ -59,6 +63,15 @@ const createWindow = async () => {
       mainWindow.webContents.send('update-message', content)
     }
   })
+  // 添加配置相关的 IPC 处理程序
+  ipcMain.handle('get-config', () => {
+    return configManager.get()
+  })
+
+  ipcMain.handle('update-config', async (event, newConfig) => {
+    return await configManager.update(newConfig)
+  })
+
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
