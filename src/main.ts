@@ -15,7 +15,8 @@ if (require('electron-squirrel-startup')) {
 }
 const createWindow = async () => {
   // 初始化配置
-  await configManager.load()
+  const config = await configManager.load()
+  console.log('config', config)
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
