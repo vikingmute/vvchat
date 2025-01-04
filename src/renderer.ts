@@ -35,6 +35,7 @@ import Settings from './views/Settings.vue'
 import { useConversationStore } from './stores/conversation'
 import './index.css'
 import 'highlight.js/styles/github-dark.min.css'
+import { i18n } from './i18n'
 
 const routes = [
   { path: '/', component: Home },
@@ -55,4 +56,8 @@ router.beforeEach((to) => {
 const pinia = createPinia()
 console.log('👋 This message is being logged by "renderer.ts", included via Vite');
 
-createApp(App).use(router).use(pinia).mount('#app')
+const app = createApp(App)
+app.use(router)
+app.use(pinia)
+app.use(i18n)
+app.mount('#app')
