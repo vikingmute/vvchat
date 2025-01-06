@@ -4,6 +4,7 @@ import OpenAI from 'openai'
 import path from 'path'
 import fs from 'fs/promises'
 import url from 'url'
+import util from 'util'
 import 'dotenv/config'
 import { CreateChatProps } from './types'
 import { convertMessages } from './helper'
@@ -16,7 +17,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = async () => {
   // 初始化配置
   const config = await configManager.load()
-  console.log('config', config)
+  console.log('config:', util.inspect(config, { depth: null, colors: true }))
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
