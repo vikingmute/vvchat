@@ -29,7 +29,7 @@ const messageStore = useMessageStore()
 const provdierStore = useProviderStore()
 const filteredMessages = computed(() => messageStore.items)
 const sendedMessages = computed(() => filteredMessages.value
-  .filter(message => message.status!== 'loading')
+  .filter(message => message.status!== 'loading' && message.status !== 'error')
   .map(message => {
     return {
       role: message.type === 'question' ? 'user' : 'assistant',
@@ -125,9 +125,18 @@ onMounted(async () => {
     console.log('stream', streamData)
     const { messageId, data } = streamData
     streamContent += data.result
+    const getMessageStatus = (data: any): MessageStatus => {
+      if (data.is_error) {
+        return 'error'
+      } else if (data.is_end) {
+        return 'finished' 
+      } else {
+        return 'streaming'
+      }
+    }
     const updatedData = {
       content: streamContent,
-      status: data.is_end ? 'finished' : 'streaming' as MessageStatus,
+      status: getMessageStatus(data),
       updatedAt: new Date().toISOString()
     }
     // update database

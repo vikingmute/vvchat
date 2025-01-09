@@ -16,7 +16,7 @@ export interface ProviderProps {
   updatedAt: string;
   models: string[];
 }
-export type MessageStatus = 'loading' | 'streaming' | 'finished'
+export type MessageStatus = 'loading' | 'streaming' | 'finished' | 'error'
 
 export interface MessageProps {
   id: number;
@@ -46,6 +46,7 @@ export interface UpdatgedStreamData {
   data: {
     is_end: boolean;
     result: string;
+    is_error?: boolean;
   }
 }
 export type OnUpdatedCallback = (data: UpdatgedStreamData) => void;

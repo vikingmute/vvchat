@@ -54,15 +54,28 @@ const createWindow = async () => {
   ipcMain.on('start-chat', async (event, data: CreateChatProps ) => {
     console.log('hey', data)
     const { providerName, messages, messageId, selectedModel } = data
-    const provider = createProvider(providerName)
-    const stream = await provider.chat(messages, selectedModel)
-    for await (const chunk of stream) {
-      console.log('the chunk', chunk)
-      const content = {
-        messageId,
-        data: chunk
+    try {
+      const provider = createProvider(providerName)
+      const stream = await provider.chat(messages, selectedModel)
+      for await (const chunk of stream) {
+        console.log('the chunk', chunk)
+        const content = {
+          messageId,
+          data: chunk
+        }
+        mainWindow.webContents.send('update-message', content)
       }
-      mainWindow.webContents.send('update-message', content)
+    } catch (error) {
+      console.error('Chat error:', error)
+      const errorContent = {
+        messageId,
+        data: {
+          is_end: true,
+          result: error instanceof Error ? error.message : '与AI服务通信时发生错误',
+          is_error: true
+        }
+      }
+      mainWindow.webContents.send('update-message', errorContent)
     }
   })
   // 添加配置相关的 IPC 处理程序
