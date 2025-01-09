@@ -10,6 +10,7 @@ import { CreateChatProps } from './types'
 import { convertMessages } from './helper'
 import { createProvider } from './providers/createProvider'
 import { configManager } from './config'
+import { createMenu } from './menu'
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -27,6 +28,10 @@ const createWindow = async () => {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  // Create application menu
+  createMenu(mainWindow)
+
   protocol.handle('safe-file', async (request) => {
     console.log(request.url)
     const filePath = decodeURIComponent(request.url.slice('safe-file://'.length))
