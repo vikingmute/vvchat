@@ -10,7 +10,8 @@ import { CreateChatProps } from './types'
 import { convertMessages } from './helper'
 import { createProvider } from './providers/createProvider'
 import { configManager } from './config'
-import { createMenu, updateMenu } from './menu'
+import { createMenu, updateMenu, createContextMenu } from './menu'
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -30,6 +31,13 @@ const createWindow = async () => {
 
   // Create application menu
   createMenu(mainWindow)
+
+  // Add context menu handler
+  ipcMain.on('show-context-menu', (event, id) => {
+    const win = BrowserWindow.fromWebContents(event.sender)
+    if (!win) return
+    createContextMenu(win, id)
+  })
 
   protocol.handle('safe-file', async (request) => {
     console.log(request.url)

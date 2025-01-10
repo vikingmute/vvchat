@@ -9,9 +9,10 @@ const messages: Record<string, MessageSchema> = {
   zh
 }
 
-const createMenu = (mainWindow: BrowserWindow) => {
+// 创建一个通用的翻译函数
+const createTranslator = () => {
   const config = configManager.get()
-  const t = (key: string) => {
+  return (key: string) => {
     const keys = key.split('.')
     let result: any = messages[config.language]
     for (const k of keys) {
@@ -19,6 +20,24 @@ const createMenu = (mainWindow: BrowserWindow) => {
     }
     return result as string
   }
+}
+
+const createContextMenu = (win: BrowserWindow, id: number) => {
+  const t = createTranslator()
+  const template = [
+    {
+      label: t('contextMenu.deleteConversation'),
+      click: () => {
+        win.webContents.send('delete-conversation', id)
+      }
+    }
+  ]
+  const menu = Menu.buildFromTemplate(template)
+  menu.popup({ window: win })
+}
+
+const createMenu = (mainWindow: BrowserWindow) => {
+  const t = createTranslator()
 
   const template: (MenuItemConstructorOptions)[] = [
     {
@@ -144,4 +163,4 @@ const updateMenu = (mainWindow: BrowserWindow) => {
   createMenu(mainWindow)
 }
 
-export { createMenu, updateMenu } 
+export { createMenu, updateMenu, createContextMenu } 

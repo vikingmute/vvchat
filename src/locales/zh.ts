@@ -1,11 +1,14 @@
 export default {
   settings: {
-    title: '应用设置',
-    language: '语言设置',
+    title: '设置',
+    language: '语言',
     fontSize: '字体大小',
     selectLanguage: '选择语言...',
-    general: '通用设置',
-    models: '模型设置'
+    general: '通用',
+    models: '模型'
+  },
+  contextMenu: {
+    deleteConversation: '删除对话'
   },
   common: {
     send: '发送',
