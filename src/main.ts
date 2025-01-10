@@ -10,15 +10,14 @@ import { CreateChatProps } from './types'
 import { convertMessages } from './helper'
 import { createProvider } from './providers/createProvider'
 import { configManager } from './config'
-import { createMenu } from './menu'
+import { createMenu, updateMenu } from './menu'
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 const createWindow = async () => {
   // 初始化配置
-  const config = await configManager.load()
-  console.log('config:', util.inspect(config, { depth: null, colors: true }))
+  await configManager.load()
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -89,7 +88,12 @@ const createWindow = async () => {
   })
 
   ipcMain.handle('update-config', async (event, newConfig) => {
-    return await configManager.update(newConfig)
+    const updatedConfig = await configManager.update(newConfig)
+    // 如果语言发生变化，更新菜单
+    if (newConfig.language) {
+      updateMenu(mainWindow)
+    }
+    return updatedConfig
   })
 
   // and load the index.html of the app.
