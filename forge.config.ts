@@ -7,6 +7,10 @@ import { MakerDMG } from '@electron-forge/maker-dmg';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -35,6 +39,20 @@ const config: ForgeConfig = {
       format: 'ULFO',
     }),
     new MakerZIP({}, ['darwin']), 
+  ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'vikingmute',
+          name: 'vvchat'
+        },
+        prerelease: false,
+        draft: true,
+        authToken: process.env.GITHUB_TOKEN
+      }
+    }
   ],
   plugins: [
     new VitePlugin({
